@@ -1,0 +1,81 @@
+$button-h: 3em;
+$button-w: 3*$button-h;
+$shadow-o0: .125rem;
+$shadow-o1: 1.5*$shadow-o0;
+$shadow-b: 1.5rem;
+
+%posa {
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+}
+
+button {
+	--hue: 76;
+	--sat: 100%;
+	--lum: 32%;
+	display: block;
+	border: none;
+	margin: 1em auto;
+	padding: 0;
+	position: relative;
+	width: $button-w; height: $button-h;
+	background: none;
+	font: 5em/ #{1.07*$button-h} advent pro, sans-serif;
+	filter: contrast(.5);
+	transition: .3s;
+	cursor: pointer;
+	
+	&:focus, &:hover {
+		outline: none;
+		filter: none
+	}
+	
+	&:active {
+		transform: translateY(.25rem);
+		
+		[aria-hidden='true'] {
+			transform: translateY(var(--ty, .25rem));
+			
+			&:nth-child(2) { --ty: .75rem }
+		}
+	}
+	
+	span {
+		@extend %posa;
+		
+		&[aria-hidden='true'] {
+			filter: 
+				drop-shadow($shadow-o0 $shadow-o1 hsl(var(--hue), calc(var(--sat) - 25%), 25%)) 
+				drop-shadow(-$shadow-o1 (-$shadow-o0) hsl(var(--hue), calc(var(--sat) - 41%), calc(var(--lum) + 31%))) 
+				drop-shadow($shadow-b $shadow-b $shadow-b rgba(#000, .75));
+			
+			&:after {
+				@extend %posa;
+				background: hsl(var(--hue), var(--sat), var(--lum));
+				clip-path: polygon(100% 0, 91% 91%, 13% 100%, 0 35%);
+				content: ''
+			}
+			
+			&:nth-child(2) {
+				--sat: 0%;
+				--lum: 83%;
+				
+				&:after {
+					clip-path: polygon(3% 21%, 85% 25%, 75% 93%, 14% 87%)
+				}
+			}
+		}
+	
+		&:last-child {
+			background: radial-gradient(black, white 83%) 50% .125em/ .5em 50%;
+			-webkit-background-clip: text;
+							background-clip: text;
+			color: transparent;
+			filter: drop-shadow(2px 2px #313131)
+		}
+	}
+	
+	&:nth-of-type(2) { --hue: 187 }
+}
+
+@media (max-width: 800px) { html { font-size: 2vw } }
